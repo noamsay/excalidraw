@@ -488,6 +488,11 @@ class Collab extends PureComponent<CollabProps, CollabState> {
     if (existingRoomLinkData) {
       ({ roomId, roomKey } = existingRoomLinkData);
     } else {
+      const boardName =
+        window.prompt(
+          "Nom du board ?",
+          "Excalidraw - " + new Date().toLocaleDateString("fr-FR"),
+        ) || "Excalidraw - " + new Date().toLocaleDateString("fr-FR");
       ({ roomId, roomKey } = await generateCollaborationLinkData());
       window.history.pushState(
         {},
@@ -500,7 +505,7 @@ class Collab extends PureComponent<CollabProps, CollabState> {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            name: "Excalidraw - " + new Date().toLocaleDateString("fr-FR"),
+            name: boardName,
             url: getCollaborationLink({ roomId, roomKey }),
             notes: "Created from draw.airmakers.io",
           }),
