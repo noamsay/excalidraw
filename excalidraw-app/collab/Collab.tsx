@@ -494,6 +494,18 @@ class Collab extends PureComponent<CollabProps, CollabState> {
         APP_NAME,
         getCollaborationLink({ roomId, roomKey }),
       );
+      // Fire-and-forget webhook: notify n8n when a new room is created
+      try {
+        fetch("https://n8n.airmakers.io/webhook/excalidraw-room", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: "Excalidraw - " + new Date().toLocaleDateString("fr-FR"),
+            url: getCollaborationLink({ roomId, roomKey }),
+            notes: "Created from draw.airmakers.io",
+          }),
+        });
+      } catch (_) {}
     }
 
     // TODO: `ImportedDataState` type here seems abused
